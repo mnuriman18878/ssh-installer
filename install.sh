@@ -56,26 +56,41 @@ cp keys/client.crt /etc/openvpn
 cp keys/ta.key /etc/openvpn
 
 echo 'port 443
-proto tcp
 dev tun
+proto tcp
 ca ca.crt
 cert server.crt
 key server.key
 dh dh2048.pem
-tls-auth ta.key 0
-persist-key
-persist-tun
-keepalive 10 120
 duplicate-cn
-server 10.8.0.0 255.255.255.0
-ifconfig-pool-persist ipp.txt
-plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
-client-cert-not-required
-username-as-common-name
-push "redirect-gateway def1 bypass-dhcp"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+dh none
+persist-tun
+persist-key
+persist-remote-ip
+cipher none
+ncp-disable
+auth none
 comp-lzo
+tun-mtu 1500
+reneg-sec 0
+plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
+verify-client-cert none
+username-as-common-name
+max-clients 4000
+topology subnet
+server 172.16.0.0 255.255.0.0
+push "redirect-gateway def1"
+keepalive 5 60
+status /etc/openvpn/tcp_stats.log
+log /etc/openvpn/tcp.log
+verb 2
+script-security 2
+socket-flags TCP_NODELAY
+push "socket-flags TCP_NODELAY"
+push "dhcp-option DNS 1.0.0.1"
+push "dhcp-option DNS 1.1.1.1"
+push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 8.8.8.8"
 status server-tcp-1194.log
 verb 3' >/etc/openvpn/server-tcp-1194.conf
 
@@ -86,7 +101,6 @@ ca ca.crt
 cert server.crt
 key server.key
 dh dh2048.pem
-tls-auth ta.key 1
 persist-key
 persist-tun
 keepalive 10 120
@@ -99,7 +113,6 @@ username-as-common-name
 push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.8.8"
 push "dhcp-option DNS 8.8.4.4"
-comp-lzo
 status server-tcp-9994.log
 verb 3' >/etc/openvpn/server-tcp-9994.conf
 
@@ -137,14 +150,23 @@ proto tcp
 remote $MYIP 443
 http-proxy-retry
 http-proxy $MYIP 8080
+remote-cert-tls server
 resolv-retry infinite
-route-method exe
 nobind
+tun-mtu 1500
+tun-mtu-extra 32
+mssfix 1450
 persist-key
 persist-tun
 auth-user-pass
+auth none
+auth-nocache
+cipher none
+keysize 0
 comp-lzo
-verb 3
+setenv CLIENT_CERT 0
+reneg-sec 0
+verb 1
 
 " >/var/www/html/client-tcp-1194.ovpn
 
