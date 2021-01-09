@@ -168,7 +168,7 @@ setenv CLIENT_CERT 0
 reneg-sec 0
 verb 1
 
-" >/var/www/html/client-tcp-1194.ovpn
+" >/var/www/html/client.ovpn
 
 echo "client
 dev tun
@@ -185,7 +185,7 @@ auth-user-pass
 comp-lzo
 verb 3
 
-" >/var/www/html/client-tcp-9994.ovpn
+" >/var/www/html/client1.ovpn
 
 echo "client
 dev tun
@@ -200,7 +200,7 @@ auth-user-pass
 comp-lzo
 verb 3
 
-" >/var/www/html/client-udp-25000.ovpn
+" >/var/www/html/client2.ovpn
 
 echo "client
 dev tun
@@ -217,7 +217,7 @@ auth-user-pass
 comp-lzo
 verb 3
 
-" >/var/www/html/client-ssl-2905.ovpn
+" >/var/www/html/client3.ovpn
 
 echo "client
 dev tun
@@ -232,7 +232,7 @@ auth-user-pass
 comp-lzo
 verb 3
 
-" >/var/www/html/client-ssl-9443.ovpn
+" >/var/www/html/client4.ovpn
 
 echo "client
 dev tun
